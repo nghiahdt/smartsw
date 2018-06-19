@@ -297,7 +297,7 @@ INTERRUPT_HANDLER(TIM1_UPD_OVF_TRG_BRK_IRQHandler, 11) {
   TIM1->SR1 = (uint8_t)(~TIM1_SR1_UIF); // TIM1_ClearITPendingBit(TIM1_IT_UPDATE)
 }
 
-INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23) {
+/*INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23) {
 #ifndef NOASM
   asm("INC S:__ms + 3\n"
     "JRNE skip\n"
@@ -311,4 +311,4 @@ INTERRUPT_HANDLER(TIM4_UPD_OVF_IRQHandler, 23) {
   ++__ms;
 #endif
   TIM4->SR1 = (uint8_t)(~TIM4_SR1_UIF); // TIM4_ClearITPendingBit(TIM4_IT_UPDATE)
-}
+}*/

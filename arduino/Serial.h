@@ -5,7 +5,7 @@
 #include "../stm8s/stm8s.h"
 #include "Print.h"
 
-#define SERIALBUFFERED
+//#define SERIALBUFFERED
 
 class HardwareSerial : public Print {
 public:
