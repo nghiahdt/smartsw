@@ -28,6 +28,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "stm8s_uart1.h"
 
+#ifdef UART1
+
 /** @addtogroup STM8S_StdPeriph_Driver
   * @{
   */
@@ -796,5 +798,6 @@ void UART1_ClearITPendingBit(UART1_IT_TypeDef UART1_IT)
   * @}
   */
   
+  #endif
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
