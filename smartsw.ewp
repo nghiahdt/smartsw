@@ -1643,27 +1643,6 @@
         </file>
     </group>
     <group>
-        <name>capsen</name>
-        <file>
-            <name>$PROJ_DIR$\capsen\io.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\capsen\io.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\capsen\stm8_interrupt_vector.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\capsen\stm8s_conf.h</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\capsen\stm8s_it.c</name>
-        </file>
-        <file>
-            <name>$PROJ_DIR$\capsen\stm8s_it.h</name>
-        </file>
-    </group>
-    <group>
         <name>stm8s</name>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s.h</name>
@@ -1691,6 +1670,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_clk.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_conf.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_exti.c</name>

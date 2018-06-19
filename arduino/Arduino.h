@@ -72,7 +72,8 @@ void tone(uint8_t pin, uint16_t freq);
 void noTone();
 
 inline uint32_t micros() {
-  return (__us | TIM1->CNTRL);
+  uint8_t x = TIM1->CNTRL;
+  return (__us | x);
 }
 
 inline uint32_t millis() {

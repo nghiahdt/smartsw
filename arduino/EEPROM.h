@@ -28,6 +28,7 @@ public:
 
       return t;
     }
+    return 0;
   }
   template<typename T> static const T& put(uint16_t address, const T& t) {
     if (address + sizeof(T) <= length()) {
@@ -39,6 +40,7 @@ public:
 
       return t;
     }
+    return 0;
   }
 };
 

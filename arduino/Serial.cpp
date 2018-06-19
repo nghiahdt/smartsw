@@ -87,9 +87,10 @@ uint8_t HardwareSerial::peak() {
   uint8_t result;
 
   disableInterrupts();
-  if (_rxbuflen)
-    result = _rxbuf[(_rxbufpos - _rxbuflen + RXBUFSIZE) % RXBUFSIZE];
-  else
+  if (_rxbuflen) {
+    uint8_t rxbufpos = _rxbufpos;
+    result = _rxbuf[(rxbufpos - _rxbuflen + RXBUFSIZE) % RXBUFSIZE];
+  } else
     result = 0;
   enableInterrupts();
 
@@ -103,7 +104,8 @@ uint8_t HardwareSerial::read() {
 #ifdef SERIALBUFFERED
   while (! _rxbuflen); // Wait for incoming byte
   disableInterrupts();
-  uint8_t c = _rxbuf[(_rxbufpos - _rxbuflen + RXBUFSIZE) % RXBUFSIZE];
+  uint8_t rxbufpos = _rxbufpos;
+  uint8_t c = _rxbuf[(rxbufpos - _rxbuflen + RXBUFSIZE) % RXBUFSIZE];
   --_rxbuflen;
   enableInterrupts();
 
@@ -163,7 +165,8 @@ INTERRUPT_HANDLER(UART1_TX_IRQHandler, 17) {
 INTERRUPT_HANDLER(UART1_RX_IRQHandler, 18) {
   HardwareSerial::_error = (UART1->SR & UART1_SR_OR) != 0;
   if (HardwareSerial::_rxbuflen < HardwareSerial::RXBUFSIZE) {
-    HardwareSerial::_rxbuf[HardwareSerial::_rxbufpos] = (uint8_t)UART1->DR;
+    uint8_t rxbufpos = HardwareSerial::_rxbufpos;
+    HardwareSerial::_rxbuf[rxbufpos] = (uint8_t)UART1->DR;
     if (++HardwareSerial::_rxbufpos >= HardwareSerial::RXBUFSIZE)
       HardwareSerial::_rxbufpos = 0;
     ++HardwareSerial::_rxbuflen;
