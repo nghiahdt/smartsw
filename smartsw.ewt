@@ -2137,6 +2137,54 @@
         </file>
     </group>
     <group>
+        <name>capsen</name>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_api.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_api.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_checkconfig.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_conf.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_internal.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_multichannelkey.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_multichannelkey.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_rc_acquisition.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_rc_acquisition.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_services.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_services.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_singlechannelkey.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_singlechannelkey.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_timebase.c</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\capsen\stm8_tsl_timebase.h</name>
+        </file>
+    </group>
+    <group>
         <name>stm8s</name>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s.h</name>
@@ -2146,6 +2194,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_adc1.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_adc2.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_awu.c</name>
@@ -2158,6 +2209,9 @@
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_beep.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_can.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_clk.c</name>
@@ -2229,16 +2283,31 @@
             <name>$PROJ_DIR$\stm8s\stm8s_tim2.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_tim3.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\stm8s\stm8s_tim4.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_tim4.h</name>
         </file>
         <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_tim5.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_tim6.h</name>
+        </file>
+        <file>
             <name>$PROJ_DIR$\stm8s\stm8s_uart1.c</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_uart1.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_uart2.h</name>
+        </file>
+        <file>
+            <name>$PROJ_DIR$\stm8s\stm8s_uart3.h</name>
         </file>
         <file>
             <name>$PROJ_DIR$\stm8s\stm8s_wwdg.c</name>
