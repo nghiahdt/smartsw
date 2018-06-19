@@ -1,5 +1,7 @@
 #include "Serial.h"
 
+#ifdef UART1
+
 void HardwareSerial::begin(uint32_t baud) {
   uint8_t brr1, brr2;
 
@@ -184,3 +186,5 @@ volatile uint8_t HardwareSerial::_txbuflen = 0;
 #endif
 
 HardwareSerial Serial;
+
+#endif
