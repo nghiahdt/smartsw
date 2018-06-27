@@ -19,7 +19,7 @@ void nrf_init();
 void nrf_set_rx_mode();
 void nrf_set_tx_mode();
 unsigned char nrf_get_status();
-unsigned char nrf_rx_packet(unsigned char* rx_buf);
+bool nrf_rx_packet(unsigned char* rx_buf);
 void nrf_tx_packet(unsigned char* tx_buf);
 
 #endif

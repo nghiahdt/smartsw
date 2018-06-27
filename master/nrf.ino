@@ -99,18 +99,18 @@ unsigned char nrf_get_status()
 	return value;
 }
 
-unsigned char nrf_rx_packet(unsigned char* rx_buf)
+bool nrf_rx_packet(unsigned char* rx_buf)
 {
-	unsigned char revale=0;
+	bool have = false;
     unsigned char sta = nrf_spi_read(STATUS);
-    if((sta & RX_DR)!=0)		// Data in RX FIFO
+    if (sta & RX_DR)		// Data in RX FIFO
 	{
 		nrf_chip_enable(LOW);
 		nrf_spi_read_buf(RD_RX_PLOAD, rx_buf, NRF_PAYLOAD_WIDTH);// read receive payload from RX_FIFO buffer
-		revale =1;	
+		have = true;
 	}
-	nrf_spi_rw_reg(WRITE_REG+STATUS, sta);   
-	return revale;
+	//nrf_spi_rw_reg(WRITE_REG+STATUS, sta);   
+	return have;
 }
 
 void nrf_tx_packet(unsigned char* tx_buf)
