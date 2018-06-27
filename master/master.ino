@@ -3,15 +3,21 @@
 void setup()
 {
 	nrf_init();
-	nrf_set_tx_mode();
+	nrf_set_rx_mode();
 	Serial.begin(115200);
 }
 
-unsigned char tx_buf[NRF_PAYLOAD_WIDTH] = { 'a', 'b', 'z'};
+unsigned char rx_buf[NRF_PAYLOAD_WIDTH] = { '1', '2', '3', NULL };
 
 void loop()
 {
-	Serial.println(nrf_get_status());
-	nrf_tx_packet(tx_buf);
+	if (nrf_rx_packet(rx_buf))
+	{
+		Serial.println((char*)rx_buf);
+	}
+	else
+	{
+		Serial.println(nrf_get_status());
+	}
 	delay(1000);
 }

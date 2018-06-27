@@ -93,10 +93,7 @@ void nrf_set_tx_mode()
 
 unsigned char nrf_get_status()
 {
-	nrf_chip_enable(LOW);
-	unsigned char value = nrf_spi_read(STATUS);
-	nrf_chip_enable(HIGH);
-	return value;
+	return nrf_spi_read(STATUS);
 }
 
 bool nrf_rx_packet(unsigned char* rx_buf)
@@ -109,7 +106,6 @@ bool nrf_rx_packet(unsigned char* rx_buf)
 		nrf_spi_read_buf(RD_RX_PLOAD, rx_buf, NRF_PAYLOAD_WIDTH);// read receive payload from RX_FIFO buffer
 		have = true;
 	}
-	//nrf_spi_rw_reg(WRITE_REG+STATUS, sta);   
 	return have;
 }
 
