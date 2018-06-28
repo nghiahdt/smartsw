@@ -2,7 +2,7 @@
 #define NRF_CSN_PIN			D1
 #define NRF_SCK_PIN			D2	
 #define NRF_MOSI_PIN		D3
-#define NRF_MISO_PIN		D4
+#define NRF_MISO_PIN		D7
 
 #define NRF_PAYLOAD_LENGTH	32
 #define NRF_CHANNEL			2
