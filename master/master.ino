@@ -1,23 +1,40 @@
-#include "nrf.h"
+#include <nrf24.h>
+#include "nrf24def.h"
+
+uint8_t tx_address[5] = {0xD7,0xD7,0xD7,0xD7,0xD7};
+uint8_t rx_address[5] = {0xD7,0xD7,0xD7,0xD7,0xD7};
 
 void setup()
 {
-	nrf_init();
-	nrf_set_rx_mode();
 	Serial.begin(115200);
+	nrf24_init();
+	nrf24_config(NRF_CHANNEL, NRF_PAYLOAD_LENGTH);
+	nrf24_tx_address(tx_address);
+	nrf24_rx_address(rx_address);
 }
-
-unsigned char rx_buf[NRF_PAYLOAD_WIDTH] = { '1', '2', '3', NULL };
 
 void loop()
 {
-	if (nrf_rx_packet(rx_buf))
+	if(nrf24_dataReady())
 	{
-		Serial.println((char*)rx_buf);
+		uint8_t data[NRF_PAYLOAD_LENGTH];
+		nrf24_getData(data);
+		Serial.println();
+		Serial.print(">Recieve: ");
+		Serial.print((char*)data);
 	}
-	else
+
+	// send
+	uint8_t data[NRF_PAYLOAD_LENGTH] = { 'a', 'b', 'c', NULL};
+	nrf24_send(data);
+	while(nrf24_isSending());
+	if(nrf24_lastMessageStatus() == NRF24_TRANSMISSON_OK)
 	{
-		Serial.println(nrf_get_status());
+		Serial.println();
+		Serial.print("> Tranmission went OK");
 	}
+	nrf24_powerUpRx();
+
+	Serial.print(".");
 	delay(1000);
 }
