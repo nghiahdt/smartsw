@@ -1,16 +1,9 @@
-#include <nrf24.h>
-#include "nrf24def.h"
-
-uint8_t tx_address[5] = {0xD7,0xD7,0xD7,0xD7,0xD7};
-uint8_t rx_address[5] = {0xD7,0xD7,0xD7,0xD7,0xD7};
+#include "nrf.h"
 
 void setup()
 {
 	Serial.begin(115200);
-	nrf24_init();
-	nrf24_config(NRF_CHANNEL, NRF_PAYLOAD_LENGTH);
-	nrf24_tx_address(tx_address);
-	nrf24_rx_address(rx_address);
+	nrf_begin();
 }
 
 void loop()

@@ -6,6 +6,20 @@
 
 #define NRF_PAYLOAD_LENGTH	32
 #define NRF_CHANNEL			2
+#define NRF24_CONFIG_CRC_2_BYTE
+#define NRF24_ADDR_LEN 5
+uint8_t tx_address[NRF24_ADDR_LEN] = {0xD7,0xD7,0xD7,0xD7,0xD7};
+uint8_t rx_address[NRF24_ADDR_LEN] = {0xD7,0xD7,0xD7,0xD7,0xD7};
+
+#include <nrf24.h>
+
+void nrf_begin()
+{
+  nrf24_init();
+  nrf24_config(NRF_CHANNEL, NRF_PAYLOAD_LENGTH);
+  nrf24_tx_address(tx_address);
+  nrf24_rx_address(rx_address);
+}
 
 void nrf24_setupPins()
 {

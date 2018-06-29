@@ -15,13 +15,30 @@
 #define NRF24
 
 #include "nRF24L01.h"
+
+#ifndef STM8S_MCU
 #include <stdint.h>
+#endif
 
+#ifndef LOW
 #define LOW 0
-#define HIGH 1
+#endif
 
-#define nrf24_ADDR_LEN 5
-#define nrf24_CONFIG ((1<<EN_CRC)|(0<<CRCO))
+#ifndef HIGH
+#define HIGH 1
+#endif
+
+#ifndef NRF24_ADDR_LEN
+#define NRF24_ADDR_LEN 5
+#endif
+
+#ifdef NRF24_CONFIG_CRC_2_BYTE
+#define NRF_CRC_BYTE_2 1
+#else
+#define NRF_CRC_BYTE_2 0
+#endif
+
+#define NRF24_CONFIG ((1<<EN_CRC)|(NRF_CRC_BYTE_2<<CRCO))
 
 #define NRF24_TRANSMISSON_OK 0
 #define NRF24_MESSAGE_LOST   1
@@ -109,8 +126,10 @@ extern void nrf24_mosi_digitalWrite(uint8_t state);
 
 /* -------------------------------------------------------------------------- */
 /* nrf24 MISO pin read function
-/* - returns: Non-zero if the pin is high */
+ * - returns: Non-zero if the pin is high */
 /* -------------------------------------------------------------------------- */
 extern uint8_t nrf24_miso_digitalRead();
+
+#include "nrf24_c.h"
 
 #endif

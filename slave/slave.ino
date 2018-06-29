@@ -6,11 +6,8 @@ void setup()
 {
 	//relay_init(Relay1);
 	//button_init(Button1);
-	nrf_init();
-	nrf_set_tx_mode();
+	nrf_begin();
 }
-
-unsigned char tx_buf[NRF_PAYLOAD_WIDTH] = { 'a', 'b', 'z'};
 
 void loop()
 {
@@ -18,6 +15,10 @@ void loop()
 	//{
 	//	relay_change(Relay1);
 	//}
-	nrf_tx_packet(tx_buf);
+
+	//uint8_t data[NRF_PAYLOAD_LENGTH] = { 'a', 'b', 'c', 0};
+	//nrf24_send(data);
+	//while(nrf24_isSending());
+
 	delay(1000);
 }
