@@ -11,7 +11,7 @@
 *   http://www.tinkerer.eu/AVRLib/nRF24L01
 * -----------------------------------------------------------------------------
 */
-#include "nrf24c.h"
+#include "nrf24.h"
 
 uint8_t payload_len;
 
@@ -44,16 +44,16 @@ void nrf24_config(uint8_t channel, uint8_t pay_length)
     nrf24_configRegister(RF_SETUP, (0<<RF_DR)|((0x03)<<RF_PWR));
 
     // CRC enable, 1 byte CRC length
-    nrf24_configRegister(CONFIG,nrf24_CONFIG);
+    nrf24_configRegister(CONFIG,NRF24_CONFIG);
 
     // Auto Acknowledgment
-    nrf24_configRegister(EN_AA,(1<<ENAA_P0)|(1<<ENAA_P1)|(0<<ENAA_P2)|(0<<ENAA_P3)|(0<<ENAA_P4)|(0<<ENAA_P5));
+    //nrf24_configRegister(EN_AA,(1<<ENAA_P0)|(1<<ENAA_P1)|(1<<ENAA_P2)|(1<<ENAA_P3)|(1<<ENAA_P4)|(1<<ENAA_P5));
 
     // Enable RX addresses
     nrf24_configRegister(EN_RXADDR,(1<<ERX_P0)|(1<<ERX_P1)|(0<<ERX_P2)|(0<<ERX_P3)|(0<<ERX_P4)|(0<<ERX_P5));
 
     // Auto retransmit delay: 1000 us and Up to 15 retransmit trials
-    nrf24_configRegister(SETUP_RETR,(0x04<<ARD)|(0x0F<<ARC));
+    nrf24_configRegister(SETUP_RETR,(0x0A<<ARD)|(0x0F<<ARC));
 
     // Dynamic length configurations: No dynamic length
     nrf24_configRegister(DYNPD,(0<<DPL_P0)|(0<<DPL_P1)|(0<<DPL_P2)|(0<<DPL_P3)|(0<<DPL_P4)|(0<<DPL_P5));
@@ -66,7 +66,7 @@ void nrf24_config(uint8_t channel, uint8_t pay_length)
 void nrf24_rx_address(uint8_t * adr) 
 {
     nrf24_ce_digitalWrite(LOW);
-    nrf24_writeRegister(RX_ADDR_P1,adr,nrf24_ADDR_LEN);
+    nrf24_writeRegister(RX_ADDR_P1,adr,NRF24_ADDR_LEN);
     nrf24_ce_digitalWrite(HIGH);
 }
 
@@ -80,8 +80,8 @@ uint8_t nrf24_payload_length()
 void nrf24_tx_address(uint8_t* adr)
 {
     /* RX_ADDR_P0 must be set to the sending addr for auto ack to work. */
-    nrf24_writeRegister(RX_ADDR_P0,adr,nrf24_ADDR_LEN);
-    nrf24_writeRegister(TX_ADDR,adr,nrf24_ADDR_LEN);
+    nrf24_writeRegister(RX_ADDR_P0,adr,NRF24_ADDR_LEN);
+    nrf24_writeRegister(TX_ADDR,adr,NRF24_ADDR_LEN);
 }
 
 /* Checks if data is available for reading */
@@ -247,7 +247,7 @@ void nrf24_powerUpRx()
     nrf24_configRegister(STATUS,(1<<RX_DR)|(1<<TX_DS)|(1<<MAX_RT)); 
 
     nrf24_ce_digitalWrite(LOW);    
-    nrf24_configRegister(CONFIG,nrf24_CONFIG|((1<<PWR_UP)|(1<<PRIM_RX)));    
+    nrf24_configRegister(CONFIG,NRF24_CONFIG|((1<<PWR_UP)|(1<<PRIM_RX)));    
     nrf24_ce_digitalWrite(HIGH);
 }
 
@@ -255,13 +255,13 @@ void nrf24_powerUpTx()
 {
     nrf24_configRegister(STATUS,(1<<RX_DR)|(1<<TX_DS)|(1<<MAX_RT)); 
 
-    nrf24_configRegister(CONFIG,nrf24_CONFIG|((1<<PWR_UP)|(0<<PRIM_RX)));
+    nrf24_configRegister(CONFIG,NRF24_CONFIG|((1<<PWR_UP)|(0<<PRIM_RX)));
 }
 
 void nrf24_powerDown()
 {
     nrf24_ce_digitalWrite(LOW);
-    nrf24_configRegister(CONFIG,nrf24_CONFIG);
+    nrf24_configRegister(CONFIG,NRF24_CONFIG);
 }
 
 /* software spi routine */

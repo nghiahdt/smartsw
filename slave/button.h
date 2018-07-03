@@ -1,7 +1,7 @@
 #ifndef _BUTTON_H_
 #define _BUTTON_H_
 
-#include "Arduino.h"
+#include <Arduino.h>
 
 //#define USE_TOUCH
 

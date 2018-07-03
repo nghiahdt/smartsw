@@ -4,20 +4,28 @@
 
 void setup()
 {
-	//relay_init(Relay1);
-	//button_init(Button1);
-	nrf_init();
-	nrf_set_tx_mode();
+  relay_init(Relay1);
+  //button_init(Button1);
+  nrf_begin();
 }
-
-unsigned char tx_buf[NRF_PAYLOAD_WIDTH] = { 'a', 'b', 'z'};
 
 void loop()
 {
-	//if (button_just_pressed(Button1))
-	//{
-	//	relay_change(Relay1);
-	//}
-	nrf_tx_packet(tx_buf);
-	delay(1000);
+  uint8_t data[NRF_PAYLOAD_LENGTH] = { 'f', 'u', 'c', 'k', 0};
+
+  //if (button_just_pressed(Button1))
+  {
+    relay_change(Relay1);
+  }
+
+  if (nrf24_getStatus() == 255)
+  {
+    relay_on(Relay1);
+  }
+
+  nrf24_send(data);
+  while(nrf24_isSending());
+
+  delay(100);
 }
+
