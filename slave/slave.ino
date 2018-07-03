@@ -11,8 +11,6 @@ void setup()
 
 void loop()
 {
-  uint8_t data[NRF_PAYLOAD_LENGTH] = { 'f', 'u', 'c', 'k', 0};
-
   //if (button_just_pressed(Button1))
   {
     relay_change(Relay1);
@@ -23,9 +21,8 @@ void loop()
     relay_on(Relay1);
   }
 
-  nrf24_send(data);
-  while(nrf24_isSending());
+  nrf24_sendString("test");
 
-  delay(100);
+  delay(1000);
 }
 
