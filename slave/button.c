@@ -34,21 +34,22 @@ bool button_is_pressing(Button button)
 			{
 				break;
 			}
-			delayMicroseconds(TOUCH_US_TICK);
+			//delayMicroseconds(TOUCH_US_TICK);
 		}
 		digitalWrite(BUTTON_SEND, LOW);
 		for (int i=0; i<TOUCH_TIME_OUT; i++)
 		{
-			t++;
+			//delayMicroseconds(TOUCH_US_TICK);	
 			if (digitalRead(pin) == LOW)
 			{
 				break;
 			}
-			delayMicroseconds(TOUCH_US_TICK);
+			t++;
 		}
 	}
 	ButtonRef[button] = (tt + tt + tt + t) >> 2;
-	nrf_debugInt(t);
+	tt = 1;
+	nrf_debugInt(tt*1000LL + t);
 	return t > (tt << 1);
 #else
 	return digitalRead(ButtonPin[button]) == LOW;

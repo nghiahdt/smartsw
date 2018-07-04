@@ -3,11 +3,11 @@
 #include "relay.h"
 
 #define STM8S_MCU
-#define NRF_CE_PIN			PD4
-#define NRF_CSN_PIN			PD5
+#define NRF_CE_PIN			PA2
+#define NRF_CSN_PIN			PA1
 #define NRF_SCK_PIN			PD6	
-#define NRF_MOSI_PIN		PD1
-#define NRF_MISO_PIN		PD2
+#define NRF_MOSI_PIN		PD5
+#define NRF_MISO_PIN		PD4
 #include <nrf24sw.h>
 #include <jsmn.h>
 
@@ -91,6 +91,6 @@ void nrf_debug(const char* text)
 void nrf_debugInt(int32_t num)
 {
 	char buff[16];
-	itoa(num, buff, 16, 10);
+	itoa32(num, buff, 16, 10);
 	nrf_debug(buff);
 }

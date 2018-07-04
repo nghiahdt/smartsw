@@ -5,9 +5,11 @@
 
 typedef enum RelayType
 {
-	Relay1 = LED_BUILTIN,
-	Relay2 = PC4,
-	Relay3 = PC5
+	Relay1 = PB5, //LED_BUILTIN
+	Relay2 = PB4,
+	Relay3 = PC3,
+	Relay4 = PC4,
+	Relay5 = PC5
 } Relay;
 
 #define RELAY_ON LOW

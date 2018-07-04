@@ -65,3 +65,34 @@ void itoa(int16_t value, char* string, int length, char radix)
 		uitoa(value, string, length, radix);
 	}
 }
+
+void uitoa32(uint32_t value, char* string, int length, char radix)
+{
+	unsigned char index, i;
+	index = length;
+	i = 0;
+	do
+	{
+		string[--index] = '0' + (value % radix);
+		if ( string[index] > '9') string[index] += 'A' - ':';   /* continue with A, B,.. */
+		value /= radix;
+	} while (value != 0);
+	do
+	{
+		string[i++] = string[index++];
+	} while ( index < length );
+	string[i] = 0; /* string terminator */
+}
+
+void itoa32(int32_t value, char* string, int length, char radix)
+{
+	if (value < 0 && radix == 10)
+	{
+		*string++ = '-';
+		uitoa32(-value, string, length, radix);
+	}
+	else
+	{
+		uitoa32(value, string, length, radix);
+	}
+}
