@@ -5,8 +5,8 @@
 
 uint16_t getId();
 const char* getIdString();
-void setMasterId(const char* id);
-const char* getMasterId();
+void setMasterId(uint16_t id);
+const char* getMasterIdString();
 
 const char* intToString(uint16_t num);
 void uitoa(uint16_t value, char* string, int length, char radix);

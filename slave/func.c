@@ -1,9 +1,14 @@
 #include "func.h"
 
+#define STM8S103F3
+#ifdef STM8S103F3
+typedef struct { uint16_t A, B, C, D, E, F; } UNIQUE_ID_t;
+volatile __at(0x4865)  UNIQUE_ID_t UDID; //stm8s
 uint16_t getId()
 {
-	return 12345;
+	return UDID.A ^ UDID.B ^ UDID.C ^ UDID.D ^ UDID.E ^ UDID.F;
 }
+#endif
 
 const char* getIdString()
 {
@@ -12,14 +17,15 @@ const char* getIdString()
 	return buff;
 }
 
-void setMasterId(const char* id)
+static char masterIdString[8] = "0"; 
+void setMasterId(uint16_t id)
 {
-
+	itoa(id, masterIdString, 8, 10);
 }
 
-const char* getMasterId()
+const char* getMasterIdString()
 {
-	return "54321";
+	return masterIdString;
 }
 
 const char* intToString(uint16_t num)
