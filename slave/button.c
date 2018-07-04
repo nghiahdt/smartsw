@@ -1,4 +1,5 @@
 #include "button.h"
+#include "nrf.h"
 
 int ButtonPin[ButtonCount] = BUTTON_PIN;
 bool ButtonStatus[ButtonCount];
@@ -47,6 +48,7 @@ bool button_is_pressing(Button button)
 		}
 	}
 	ButtonRef[button] = (tt + tt + tt + t) >> 2;
+	nrf_debugInt(t);
 	return t > (tt << 1);
 #else
 	return digitalRead(ButtonPin[button]) == LOW;

@@ -3,7 +3,7 @@
 
 #include <Arduino.h>
 
-//#define USE_TOUCH
+#define USE_TOUCH
 
 #ifdef USE_TOUCH
 #define TOUCH_TIME_OUT	100

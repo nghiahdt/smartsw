@@ -13,7 +13,7 @@ uint16_t getId()
 const char* getIdString()
 {
 	static char buff[8];
-	itoa(getId(), buff, 8, 10);
+	uitoa(getId(), buff, 8, 10);
 	return buff;
 }
 
