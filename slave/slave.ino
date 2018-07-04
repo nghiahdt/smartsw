@@ -4,25 +4,19 @@
 
 void setup()
 {
-  relay_init(Relay1);
-  //button_init(Button1);
-  nrf_begin();
+	relay_init(Relay1);
+	//button_init(Button1);
+	nrf_begin();
 }
 
 void loop()
 {
-  //if (button_just_pressed(Button1))
-  {
-    relay_change(Relay1);
-  }
+	nrf_loop();
 
-  if (nrf24_getStatus() == 255)
-  {
-    relay_on(Relay1);
-  }
+	//if (button_just_pressed(Button1))
+	{
+	relay_change(Relay1);
+	}
 
-  nrf24_sendString("test");
-
-  delay(1000);
+	delay(1000);
 }
-

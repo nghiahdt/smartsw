@@ -14,13 +14,15 @@
 typedef enum ButtonType
 {
 	Button1 = 0,
+	Button2,
+	Button3,
 	ButtonCount
 } Button;
 
 #ifdef USE_TOUCH
 #define BUTTON_SEND PA2
 #endif
-#define BUTTON_PIN { PD4 }
+#define BUTTON_PIN { PD4, PD4, PD4 }
 
 void button_init(Button button);
 bool button_is_pressing(Button button);
