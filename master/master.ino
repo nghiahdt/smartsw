@@ -16,7 +16,7 @@ void setup()
 int count = 0;
 void loop()
 {
-	if (Nrf.send("{\"x\":45910,\"m\":4444,\"c\":" + String(count%2) + "}"))
+	if (Nrf.send("{\"x\":45910,\"m\":4444,\"c\":22" + String(count%2) + "}"))
 	{
 		if (SERIAL_DEBUG)
 		{
