@@ -13,6 +13,7 @@ typedef enum ButtonType
 } Button;
 
 #define BUTTON_PIN { PC3, PC4, PC5, PC6 }
+#define BUTTON_ACTIVE HIGH
 
 void button_init(Button button);
 bool button_is_pressing(Button button);

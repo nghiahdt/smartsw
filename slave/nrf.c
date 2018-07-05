@@ -66,6 +66,7 @@ void nrf_sendStatus()
 	status += relay_is_on(Relay1) ?   1 : 0;
 	status += relay_is_on(Relay2) ?  10 : 0;
 	status += relay_is_on(Relay3) ? 100 : 0;
+	status += 3000;
 	strcpy(buff, "{\"x\":");
 	strcat(buff, getIdString());
 	strcat(buff, ",\"m\":\"");

@@ -12,7 +12,7 @@ void button_init(Button button)
 
 bool button_is_pressing(Button button)
 {
-	return digitalRead(ButtonPin[button]) == LOW;
+	return digitalRead(ButtonPin[button]) == BUTTON_ACTIVE;
 }
 
 bool button_just_pressed(Button button)

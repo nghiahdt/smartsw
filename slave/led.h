@@ -5,10 +5,22 @@
 
 typedef enum LedType
 {
-	Led1 = PA3,
-	Led2 = PB4,
-	Led3 = PD1,
-	LedStatus = PB5
+	Led1 = 0,
+	Led2,
+	Led3,
+	LedStatus,
+	LedCount,
 } Led;
+
+#define LED_PIN			{ PA3, PB4, PD1, PB5 }
+#define LED_ON			LOW
+#define LED_BLINK_TICK	100
+
+void led_init(Led led);
+void led_on(Led led);
+void led_off(Led led);
+bool led_is_on(Led led);
+void led_change(Led led);
+void led_blink(Led led, int dt);
 
 #endif

@@ -5,12 +5,14 @@
 
 typedef enum RelayType
 {
-	Relay1 = PC7,
-	Relay2 = PD2,
-	Relay3 = PD3
+	Relay1 = 0,
+	Relay2,
+	Relay3,
+	RelayCount,
 } Relay;
 
-#define RELAY_ON LOW
+#define RELAY_PIN	{ PC7, PD2, PD3 }
+#define RELAY_ON	LOW
 
 void relay_init(Relay relay);
 void relay_on(Relay relay);

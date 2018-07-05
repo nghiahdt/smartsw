@@ -1,24 +1,26 @@
 #include "relay.h"
 
+int RelayPin[RelayCount] = RELAY_PIN;
+
 void relay_init(Relay relay)
 {
-	pinMode(relay, OUTPUT);
+	pinMode(RelayPin[relay], OUTPUT);
 	relay_off(relay);
 }
 
 void relay_on(Relay relay)
 {
-	digitalWrite(relay, RELAY_ON);
+	digitalWrite(RelayPin[relay], RELAY_ON);
 }
 
 void relay_off(Relay relay)
 {
-	digitalWrite(relay, !RELAY_ON);
+	digitalWrite(RelayPin[relay], !RELAY_ON);
 }
 
 bool relay_is_on(Relay relay)
 {
-	return digitalRead(relay) == RELAY_ON;
+	return digitalRead(RelayPin[relay]) == RELAY_ON;
 }
 
 void relay_change(Relay relay)
