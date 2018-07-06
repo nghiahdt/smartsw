@@ -1,0 +1,9 @@
+Code master: 
+	- kết nối wifi, điều khiển giọng nói đơn giản (cứng cho 1 relay)
+	- button chức năng pair slave (Relay, Hub, Switch, Option, Group)
+Vẽ Slaver board
+Mua linh kiện, lấy pcb
+Test swboard (2 board 1 mặt ghép lại)
+Làm app (có thể dùng Cocos Creator)
+Chức năng hẹn giờ, điều khiển theo group
+Test swboard (board 2 mặt)
