@@ -12,7 +12,8 @@ class NrfClass
 {
 	NrfFunc _func;
 	os_timer_t _timer;
-	
+	bool _working;
+
 public:
 	void begin(const NrfFunc& func);
 	bool send(String text, bool endSend = true);

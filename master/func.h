@@ -10,7 +10,6 @@ public:
 	static const String& get();
 };
 
-String base64Decode(const String& input);
 std::string toStdString(const String& input);
 
 #endif

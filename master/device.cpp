@@ -73,13 +73,7 @@ HubManager* HubManager::getInstance()
 	{
 		_instance = new HubManager();
 		os_timer_setfn(&_instance->_timer, [](void* _this) {
-			static bool sending = false;
-			if (!sending)
-			{
-				sending = true;
-				_instance->sendWant();
-				sending = false;
-			}
+			_instance->sendWant();
 		}, _instance);
 		os_timer_arm(&_instance->_timer, 100, true);
 	}

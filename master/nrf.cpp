@@ -13,11 +13,17 @@ void NrfClass::begin(const NrfFunc& func)
 {
 	nrf_begin();
 	_func = func;
+	_working = false;
 	os_timer_setfn(&_timer, [](void* _this) {
-		std::string text = nrf24_getString();
-		if (!text.empty())
+		if (!((NrfClass*)_this)->_working)
 		{
-			((NrfClass*)_this)->_func(text);
+			((NrfClass*)_this)->_working = true;
+			std::string text = nrf24_getString();
+			if (!text.empty())
+			{
+				((NrfClass*)_this)->_func(text);
+			}
+			((NrfClass*)_this)->_working = false;
 		}
 	}, this);
 	os_timer_arm(&_timer, 100, true);
@@ -25,5 +31,12 @@ void NrfClass::begin(const NrfFunc& func)
 
 bool NrfClass::send(String text, bool endSend)
 {
-	return nrf24_sendString(text, endSend);
+	bool ok = false;
+	if (!_working)
+	{
+		_working = true;
+		ok = nrf24_sendString(text, endSend);
+		_working = false;
+	}
+	return ok;
 }
