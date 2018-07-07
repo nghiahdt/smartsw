@@ -6,7 +6,7 @@ AlexaSwitch::AlexaSwitch(unsigned int port)
 {
 }
 
-void AlexaSwitch::begin(String alexaInvokeName, CallbackFunction oncb, CallbackFunction offcb)
+AlexaSwitch* AlexaSwitch::begin(String alexaInvokeName, CallbackFunction oncb, CallbackFunction offcb)
 {
 	uint32_t chipId = ESP.getChipId();
 	char uuid[64];
@@ -91,6 +91,7 @@ void AlexaSwitch::begin(String alexaInvokeName, CallbackFunction oncb, CallbackF
 		_server.send(200, "text/plain", "");
 	});
 	_server.begin();
+	return this;
 }
 
 void AlexaSwitch::loop()
@@ -119,7 +120,7 @@ void AlexaSwitch::respondToSearch(IPAddress& senderIP, unsigned int senderPort)
 	udp.beginPacket(senderIP, senderPort);
 	udp.write(response.c_str());
 	udp.endPacket();
-	Serial.println(response.c_str());
+	Serial.println("Alexa device: " + _name + " (" + String(s) + ":" + String(_port) + ")");
 }
 
 AlexaSwitchManager* AlexaSwitchManager::_instance = nullptr;

@@ -13,6 +13,15 @@ const String& ID::get()
 	return sID;
 }
 
+int getDt()
+{
+	static uint32_t lastTime = 0;
+	uint32_t nowTime = millis();
+	int dt = nowTime - lastTime;
+	lastTime = nowTime;
+	return dt;
+}
+
 std::string toStdString(const String& input)
 {
   int inputLength = input.length() + 1;

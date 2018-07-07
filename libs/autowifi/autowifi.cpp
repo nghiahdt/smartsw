@@ -49,17 +49,12 @@ AutoWifi::AutoWifi()
 	, _dfPass()
 	, _deviceId()
 	, _callbackConnecteds()
-	, _callbackLoops()
 {
 	_getNameFunc = [] () { return ""; };
 	_getPassFunc = [] () { return ""; };
 	_pairServerCallback = [] (const std::string& name, const std::string& pass, const std::string& account) {};
 	_waitFunc = [] (int dt) { delay(dt); };
 	_isConnectedFunc = [] () { return true; };
-	os_timer_setfn(&_timer, [](void* _this) {
-		((AutoWifi*)_this)->loop();
-	}, this);
-	os_timer_arm(&_timer, 100, true);
 }
 
 void AutoWifi::setValue(const std::string& apName, const std::string& apPass, int apChannel, const std::string& dfName, const std::string& dfPass
@@ -86,11 +81,6 @@ void AutoWifi::addCallbackConnected(const std::function<void()>& func)
 	_callbackConnecteds.push_back(func);
 }
 
-void AutoWifi::addCallbackLoop(const std::function<void()>& func)
-{
-	_callbackLoops.push_back(func);
-}
-
 void AutoWifi::setAsAP()
 {
 	WiFi.mode(WIFI_AP);
@@ -107,11 +97,11 @@ void AutoWifi::setAsClient(const char* name, const char* pass)
 	{
 		_waitFunc(1000);
 	}
+	Serial.println("Wifi is connected");
 	for (const auto& f : _callbackConnecteds)
 	{
 		f();
 	}
-	Serial.println("Wifi is connected");
 }
 
 bool AutoWifi::pairServer()
@@ -189,10 +179,6 @@ bool AutoWifi::loop()
 {
 	if (isConnected())
 	{
-		for (const auto& f : _callbackLoops)
-		{
-			f();
-		}
 	}
 	else
 	{

@@ -5,10 +5,6 @@
 #include <functional>
 #include <vector>
 
-extern "C" {
-#include "user_interface.h"
-}
-
 class Hub;
 class AlexaSwitch;
 
@@ -54,11 +50,13 @@ class HubManager
 	HubManager() {}
 	static HubManager* _instance;
 	std::vector<Hub> _hubs;
-	os_timer_t _timer;
+	bool _addNewHub;
+	void sendWant();
+	void updateStatus(const std::string& text, bool addNew);
 public:
 	static HubManager* getInstance();
-	void updateStatus(const std::string& text, bool addNew);
-	void sendWant();
+	void loop(int dt);
+	void setAdNewhub(bool value) { _addNewHub = value; }
 	Hub* getHub(const std::string& id);
 	void setRelayWant(const std::string& hubId, int relayId, Relay::Status status);
 };

@@ -21,7 +21,7 @@ private:
 
 public:
 	AlexaSwitch(unsigned int port);
-	void begin(String alexaInvokeName, CallbackFunction onCallback, CallbackFunction offCallback);
+	AlexaSwitch* begin(String alexaInvokeName, CallbackFunction onCallback, CallbackFunction offCallback);
 	void loop();
 	void respondToSearch(IPAddress& senderIP, unsigned int senderPort);
 };
@@ -34,8 +34,8 @@ class AlexaSwitchManager
 	AlexaSwitchManager() {}
 public:
 	static AlexaSwitchManager* getInstance();
+	void loop(); // can not run in timer
 	void begin();
-	void loop();
 	void clearDevice();
 	void addDevice(AlexaSwitch* device);
 };

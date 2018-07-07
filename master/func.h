@@ -10,6 +10,7 @@ public:
 	static const String& get();
 };
 
+int getDt();
 std::string toStdString(const String& input);
 
 #endif

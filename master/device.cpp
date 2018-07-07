@@ -72,10 +72,10 @@ HubManager* HubManager::getInstance()
 	if (!_instance)
 	{
 		_instance = new HubManager();
-		os_timer_setfn(&_instance->_timer, [](void* _this) {
-			_instance->sendWant();
-		}, _instance);
-		os_timer_arm(&_instance->_timer, 100, true);
+		_instance->_addNewHub = false;
+		Nrf.begin([](const std::string& text) {
+			_instance->updateStatus(text, _instance->_addNewHub);
+		});
 	}
 	return _instance;
 }
@@ -145,6 +145,23 @@ void HubManager::sendWant()
 		if (hub.needSend())
 		{
 			hub.sendWant();
+		}
+	}
+}
+
+void HubManager::loop(int dt)
+{
+	Nrf.loop();
+	sendWant();
+	if (_addNewHub)
+	{
+		static uint16_t c = 0;
+		c += dt;
+		if (c >= 60000)
+		{
+			c = 0;			
+			_addNewHub = false;
+			Serial.println("Auto stop add new hub");
 		}
 	}
 }

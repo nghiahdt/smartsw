@@ -6,15 +6,11 @@
 
 #include "conf.h"
 #include "func.h"
-#include "nrf.h"
 #include "device.h"
 
 void setup()
 {
 	Serial.begin(115200);
-	Nrf.begin([](const std::string& text) {
-		HubManager::getInstance()->updateStatus(text, true);
-	});
 	initWifi();
 	initAlexa();
 }
@@ -22,16 +18,9 @@ void setup()
 void loop()
 {
 	int dt = getDt();
-	//
-}
-
-int getDt()
-{
-	static uint32_t lastTime = 0;
-	uint32_t nowTime = millis();
-	int dt = nowTime - lastTime;
-	lastTime = nowTime;
-	return dt;
+	AutoWifi::getInstance()->loop();
+	AlexaSwitchManager::getInstance()->loop();
+	HubManager::getInstance()->loop(dt);
 }
 
 void initWifi()
@@ -48,18 +37,27 @@ void initWifi()
 
 void initAlexa()
 {
-	static AlexaSwitch light(77);
 	AutoWifi::getInstance()->addCallbackConnected([](){
+		Serial.println("Add Alexa devices");
 		AlexaSwitchManager::getInstance()->begin();
-		light.begin("light", [](){ 
-			HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
-		}, [](){ 
-			HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
-		});
 		AlexaSwitchManager::getInstance()->clearDevice();
-		AlexaSwitchManager::getInstance()->addDevice(&light);
-	});
-	AutoWifi::getInstance()->addCallbackLoop([](){
-		AlexaSwitchManager::getInstance()->loop();
+		{
+			static AlexaSwitch newHub(100);
+			AlexaSwitchManager::getInstance()->addDevice(newHub.begin("new", [](){ 
+				HubManager::getInstance()->setAdNewhub(true);
+				Serial.println("Start add new hub");
+			}, [](){ 
+				HubManager::getInstance()->setAdNewhub(false);
+				Serial.println("Stop add new hub");
+			}));
+		}
+		{
+			static AlexaSwitch light(177);
+			AlexaSwitchManager::getInstance()->addDevice(light.begin("light", [](){ 
+				HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
+			}, [](){ 
+				HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
+			}));
+		}
 	});
 }
