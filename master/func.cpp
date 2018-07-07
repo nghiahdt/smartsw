@@ -4,8 +4,8 @@
 
 const String& ID::get()
 {
-	static String sID = "";
-	if (sID.length() <= 0)
+	static String sID = "12345";
+	/*if (sID.length() <= 0)
 	{
 		String clientMac = "";
 		unsigned char mac[6];
@@ -15,7 +15,7 @@ const String& ID::get()
 			clientMac += String(mac[i], 16);
 		}
 		sID = clientMac;
-	}
+	}*/
 	return sID;
 }
 

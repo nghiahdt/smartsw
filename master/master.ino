@@ -1,13 +1,17 @@
 #define SERIAL_DEBUG true
 
+#include <alexa.h>
+
 #include "nrf.h"
 #include "wifi.h"
-#include <alexa.h>
+#include "device.h"
+
 
 void setup()
 {
 	Serial.begin(115200);
 	Nrf.begin([](const std::string& text) {
+		HubManager::getInstance()->updateStatus(text, true);
 	});
 	initAlexa();
 }
@@ -35,13 +39,13 @@ int getDt()
 
 void initAlexa()
 {
-	static AlexaSwitch light(99);
+	static AlexaSwitch light(77);
 	Wifi::getInstance()->addCallbackConnected([](){
 		AlexaSwitchManager::getInstance()->begin();
 		light.begin("light", [](){ 
-			Nrf.send("{\"x\":45910,\"m\":4444,\"c\":212}");
+			HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
 		}, [](){ 
-			Nrf.send("{\"x\":45910,\"m\":4444,\"c\":202}");
+			HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
 		});
 		AlexaSwitchManager::getInstance()->clearDevice();
 		AlexaSwitchManager::getInstance()->addDevice(&light);
