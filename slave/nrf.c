@@ -69,7 +69,7 @@ void nrf_sendStatus()
 	status += 3000;
 	strcpy(buff, "{\"x\":");
 	strcat(buff, getIdString());
-	strcat(buff, ",\"m\":\"");
+	strcat(buff, ",\"m\":");
 	strcat(buff, getMasterIdString());
 	strcat(buff, ",\"s\":");
 	strcat(buff, intToString(status));
