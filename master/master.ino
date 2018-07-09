@@ -52,11 +52,13 @@ void initAlexa()
 			}));
 		}
 		{
-			static AlexaSwitch light(177);
-			AlexaSwitchManager::getInstance()->addDevice(light.begin("light", [](){ 
-				HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
+			static AlexaSwitch all(101);
+			AlexaSwitchManager::getInstance()->addDevice(all.begin("all", [](){ 
+				HubManager::getInstance()->setAllRelayWant(Relay::Status::On);
+				//HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
 			}, [](){ 
-				HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
+				HubManager::getInstance()->setAllRelayWant(Relay::Status::Off);
+				//HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
 			}));
 		}
 	});

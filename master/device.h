@@ -42,6 +42,7 @@ public:
 	void updateStatus(const std::string& text);
 	bool needSend() const;
 	void sendWant() const;
+	int getRelayCount();
 	Relay* getRelay(int id);
 };
 
@@ -50,15 +51,16 @@ class HubManager
 	HubManager() {}
 	static HubManager* _instance;
 	std::vector<Hub> _hubs;
-	bool _addNewHub;
+	uint16_t _addNewHub;
 	void sendWant();
 	void updateStatus(const std::string& text, bool addNew);
 public:
 	static HubManager* getInstance();
 	void loop(int dt);
-	void setAdNewhub(bool value) { _addNewHub = value; }
+	void setAdNewhub(bool value) { _addNewHub = value ? 60000 : 0; }
 	Hub* getHub(const std::string& id);
 	void setRelayWant(const std::string& hubId, int relayId, Relay::Status status);
+	void setAllRelayWant(Relay::Status status);
 };
 
 //--------------------------

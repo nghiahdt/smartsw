@@ -56,6 +56,11 @@ void Hub::sendWant() const
 	}
 }
 
+int Hub::getRelayCount()
+{
+	return _relays.size();
+}
+
 Relay* Hub::getRelay(int id)
 {
 	if (id < _relays.size())
@@ -72,9 +77,9 @@ HubManager* HubManager::getInstance()
 	if (!_instance)
 	{
 		_instance = new HubManager();
-		_instance->_addNewHub = false;
+		_instance->_addNewHub = 0;
 		Nrf.begin([](const std::string& text) {
-			_instance->updateStatus(text, _instance->_addNewHub);
+			_instance->updateStatus(text, _instance->_addNewHub > 0);
 		});
 	}
 	return _instance;
@@ -153,14 +158,15 @@ void HubManager::loop(int dt)
 {
 	Nrf.loop();
 	sendWant();
-	if (_addNewHub)
+	if (_addNewHub > 0)
 	{
-		static uint16_t c = 0;
-		c += dt;
-		if (c >= 60000)
+		if (dt > _addNewHub)
 		{
-			c = 0;			
-			_addNewHub = false;
+			dt = _addNewHub;
+		}
+		_addNewHub -= dt;
+		if (_addNewHub == 0)
+		{
 			Serial.println("Auto stop add new hub");
 		}
 	}
@@ -187,6 +193,17 @@ void HubManager::setRelayWant(const std::string& hubId, int relayId, Relay::Stat
 		if (relay)
 		{
 			relay->setWant(status);
+		}
+	}
+}
+
+void HubManager::setAllRelayWant(Relay::Status status)
+{
+	for (auto& hub : _hubs)
+	{
+		for (int i = 0; i < hub.getRelayCount(); i++)
+		{
+			hub.getRelay(i)->setWant(status);
 		}
 	}
 }

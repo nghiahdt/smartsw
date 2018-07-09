@@ -1,5 +1,5 @@
 Code master: 
-	- list slave
+	- list slave, save wifi
 	- offline
 Vẽ Slaver board
 Mua linh kiện, lấy pcb
