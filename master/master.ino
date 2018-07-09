@@ -42,7 +42,7 @@ void initAlexa()
 		AlexaSwitchManager::getInstance()->begin();
 		AlexaSwitchManager::getInstance()->clearDevice();
 		{
-			static AlexaSwitch newHub(100);
+			static AlexaSwitch newHub(999);
 			AlexaSwitchManager::getInstance()->addDevice(newHub.begin("new", [](){ 
 				HubManager::getInstance()->setAdNewhub(true);
 				Serial.println("Start add new hub");
@@ -52,12 +52,14 @@ void initAlexa()
 			}));
 		}
 		{
-			static AlexaSwitch all(101);
+			static AlexaSwitch all(1000);
 			AlexaSwitchManager::getInstance()->addDevice(all.begin("all", [](){ 
 				HubManager::getInstance()->setAllRelayWant(Relay::Status::On);
+				Serial.println("Turn on all");
 				//HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::On);
 			}, [](){ 
 				HubManager::getInstance()->setAllRelayWant(Relay::Status::Off);
+				Serial.println("Turn off all");
 				//HubManager::getInstance()->setRelayWant("45910", 1, Relay::Status::Off);
 			}));
 		}
