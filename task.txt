@@ -1,6 +1,3 @@
-Code master: 
-	- list slave, save wifi
-	- offline
 Vẽ Slaver board
 Mua linh kiện, lấy pcb
 Test swboard (2 board 1 mặt ghép lại)

@@ -3,6 +3,7 @@
 #include <time.h>
 #include <alexa.h>
 #include <autowifi.h>
+#include <save.h>
 
 #include "conf.h"
 #include "func.h"
@@ -25,11 +26,20 @@ void loop()
 
 void initWifi()
 {
-	AutoWifi::getInstance()->setValue(toStdString(WIFIAP_NAME), WIFIAP_PASS, WIFIAP_CHANNEL, WIFI_DEFAULT_NAME, WIFI_DEFAULT_PASS, []() {
-		return std::string("wifi");
-	}, []() {
-		return std::string("Ab@1234@");
+	auto wifiname = "wifiname";
+	auto wifipass = "wifipass";
+	AutoWifi::getInstance()->setValue(toStdString(WIFIAP_NAME), WIFIAP_PASS, WIFIAP_CHANNEL, WIFI_DEFAULT_NAME, WIFI_DEFAULT_PASS, [=]() {
+		return std::string("wifi"); //cheat
+		return std::string(Save::getInstance()->getString(wifiname));
+	}, [=]() {
+		return std::string("Ab@1234@"); //cheat
+		return std::string(Save::getInstance()->getString(wifipass));
 	});
+	AutoWifi::getInstance()->setPairValue([=](const std::string& name, const std::string& pass, const std::string& account) {
+		Save::getInstance()->setString(wifiname, name.c_str());
+		Save::getInstance()->setString(wifipass, pass.c_str());
+		Save::getInstance()->setString("account", account.c_str());
+	}, toStdString(ID::get()));
 	AutoWifi::getInstance()->setWaitFunc([](int dt) {
 		delay(dt);
 	});

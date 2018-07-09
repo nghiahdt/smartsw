@@ -2,6 +2,7 @@
 #include "nrf.h"
 #include "func.h"
 #include <ArduinoJson.h>
+#include <save.h>
 
 void Hub::updateStatus(const std::string& text)
 {
@@ -130,21 +131,47 @@ void HubManager::updateStatus(const std::string& text, bool addNew)
 	{
 		return;
 	}
-	std::string x = toStdString(root["x"].as<String>());
-	std::string m = toStdString(root["m"].as<String>());
-	std::string s = toStdString(root["s"].as<String>());
-	if (m == "0" && (/*x is in slave list OR*/ addNew))
+	auto x = toStdString(root["x"].as<String>());
+	auto m = root["m"].as<String>();
+	auto s = toStdString(root["s"].as<String>());
+	auto slaveListCount = "slaveListCount";
+	auto slaveIdKey = "slave";
+	if (m == "0")
 	{
-		auto json = String() +
-			"{"
-				"'x':" + x.c_str() + ","
-				"'m':" + ID::get() + ","
-				"'c':22222"
-			"}";
-		json.replace('\'', '\"');
-		Nrf.send(json);
+		bool inSlaveList = false;
+		{
+			int listCount = Save::getInstance()->getInt(slaveListCount, 0);
+			for (int i=0; i<listCount; i++)
+			{
+				if (x == Save::getInstance()->getString(toStdString(slaveIdKey + String(i)).c_str()))
+				{
+					inSlaveList = true;
+					Serial.println(String("Found slave in list: ") + x.c_str());
+					break;
+				}
+			}
+		}
+		if (!inSlaveList && addNew)
+		{
+			int listCount = Save::getInstance()->getInt(slaveListCount, 0);
+			Save::getInstance()->setString(toStdString(slaveIdKey + String(listCount)).c_str(), x.c_str(), false);
+			Save::getInstance()->setInt(slaveListCount, listCount + 1, true);
+			Serial.println(String("Add slave into list: ") + x.c_str());
+			inSlaveList = true;
+		}
+		if (inSlaveList)
+		{
+			auto json = String() +
+				"{"
+					"'x':" + x.c_str() + ","
+					"'m':" + ID::get() + ","
+					"'c':22222"
+				"}";
+			json.replace('\'', '\"');
+			Nrf.send(json);
+		}
 	}
-	else if (String(m.c_str()) == ID::get())
+	else if (m == ID::get())
 	{
 		bool found = false;
 		for (auto& hub : _hubs)
@@ -169,6 +196,29 @@ void HubManager::updateStatus(const std::string& text, bool addNew)
 				}
 				_hubs.push_back(hub);
 			}
+		}
+	}
+	else // remove x (change master)
+	{
+		int listCount = Save::getInstance()->getInt(slaveListCount, 0);
+		int found = -1;
+		for (int i=0; i<listCount; i++)
+		{
+			if (x == Save::getInstance()->getString(toStdString(slaveIdKey + String(i)).c_str()))
+			{
+				found = i;
+				break;
+			}
+		}
+		if (found >= 0)
+		{
+			for (int i=found; i<listCount-1; i++)
+			{
+				auto slave = Save::getInstance()->getString(toStdString(slaveIdKey + String(i+1)).c_str());
+				Save::getInstance()->setString(toStdString(slaveIdKey + String(i)).c_str(), slave, false);
+			}
+			Save::getInstance()->setInt(slaveListCount, listCount - 1, true);
+			Serial.println(String("Remove slave in list: ") + x.c_str());
 		}
 	}
 }
