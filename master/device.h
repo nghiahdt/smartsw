@@ -15,10 +15,12 @@ public:
 	{
 		Off = 0,
 		On = 1,
-		DontCare = 2
+		DontCare = 2,
+		Offline = 3,
+		X = 4
 	};
-	inline static char statusToString(Status status) { if (status == Status::Off) return '0'; else if (status == Status::On) return '1'; else return '2'; }
-	inline static Status stringToStatus(char c) { if (c == '0') return Status::Off; else if (c == '1') return Status::On; else return Status::DontCare; }
+	inline static char statusToString(Status status) { if (status < Status::X) return '0' + (char)status - (char)Status::Off; return '4'; }
+	inline static Status stringToStatus(char c) { if ('0' <= c && c < '4') return (Status)(c - '0'); return Status::X; }
 private:
 	Status _status;
 	Status _want;
@@ -27,21 +29,23 @@ public:
 	inline Status getStatus() const { return _status; }
 	inline Status getWant() const { return _want; }
 	inline void setStatus(Status status) { _status =  status; if (status == _want) _want = Status::DontCare; }
-	inline void setWant(Status want) { if (want != _status) _want =  want; }
-	inline bool needSend() const { return _want != Status::DontCare && _want != _status; }
+	inline void setWant(Status want) { _want = want; if (_want == _status) _want = Status::DontCare;  }
+	inline bool needSend() const { return _want != Status::DontCare && _want != _status && _status != Status::Offline; }
 };
 
 class Hub
 {
 	std::vector<Relay> _relays;
 	std::string _id;
+	int _timeout;
+	bool needSend() const;
+	void sendWant() const;
 public:
-	Hub(const std::string& id) : _relays(), _id(id) {}
+	Hub(const std::string& id) : _relays(), _id(id), _timeout(0) {}
 	inline void add(const Relay& relay) { _relays.push_back(relay); }
 	inline const std::string& getId() const { return _id; }
 	void updateStatus(const std::string& text);
-	bool needSend() const;
-	void sendWant() const;
+	void loop(int dt);
 	int getRelayCount();
 	Relay* getRelay(int id);
 };
@@ -52,7 +56,6 @@ class HubManager
 	static HubManager* _instance;
 	std::vector<Hub> _hubs;
 	uint16_t _addNewHub;
-	void sendWant();
 	void updateStatus(const std::string& text, bool addNew);
 public:
 	static HubManager* getInstance();

@@ -22,9 +22,12 @@ bool NrfClass::send(String text, bool endSend)
 
 void NrfClass::loop()
 {
-	std::string text = nrf24_getString();
-	if (!text.empty())
+	if (nrf24_dataReady())
 	{
-		Nrf._func(text);
+		std::string text = nrf24_getString();
+		if (!text.empty())
+		{
+			Nrf._func(text);
+		}
 	}
 }

@@ -5,9 +5,11 @@
 
 void Hub::updateStatus(const std::string& text)
 {
+	_timeout = 10000;
 	int num = _relays.size();
 	if (text.length() == num + 1)
 	{
+		bool updated = false;
 		for (int id=0; id < num; id++)
 		{
 			auto oldStatus = _relays[id].getStatus();
@@ -15,10 +17,39 @@ void Hub::updateStatus(const std::string& text)
 			if (oldStatus != newStatus)
 			{
 				_relays[id].setStatus(newStatus);
-				Serial.println(String("Update hub ") + _id.c_str() + " = " + text.c_str());
+				updated = true;
 			}
 		}
+		if (updated)
+		{
+			Serial.println(String("Update hub ") + _id.c_str() + " = " + text.c_str());
+		}
 	}
+}
+
+void Hub::loop(int dt)
+{
+	if (_timeout > 0)
+	{
+		if (dt > _timeout)
+		{
+			dt = _timeout;
+		}
+		_timeout -= dt;
+		if (_timeout == 0)
+		{
+			for (auto& relay : _relays)
+			{
+				relay.setStatus(Relay::Status::Offline);
+			}
+			Serial.println(String("Hub ") + _id.c_str() + " is offline");
+		}
+	}
+	else
+	{
+		_timeout = 0;
+	}
+	sendWant();
 }
 
 bool Hub::needSend() const
@@ -52,7 +83,12 @@ void Hub::sendWant() const
 			"}";
 		json.replace('\'', '\"');
 		Nrf.send(json);
-		Serial.println("Send: " + json);
+		static String lastJson = "";
+		if (json != lastJson)
+		{
+			Serial.println("Send: " + json);
+			lastJson = json;
+		}
 	}
 }
 
@@ -97,33 +133,7 @@ void HubManager::updateStatus(const std::string& text, bool addNew)
 	std::string x = toStdString(root["x"].as<String>());
 	std::string m = toStdString(root["m"].as<String>());
 	std::string s = toStdString(root["s"].as<String>());
-	if (/*x is in slave list OR*/  addNew)
-	{
-		bool found = false;
-		for (const auto& hub : _hubs)
-		{
-			if (hub.getId() == x)
-			{
-				found = true;
-				break;
-			}
-		}
-		if (!found)
-		{	
-			int num = s[0] - '0';
-			if (0 < num && num < 10)
-			{
-				Serial.println(String("Add hub ") + x.c_str() + " have " + s[0] + " relays");
-				Hub hub(x);
-				for (int i=0; i<num; i++)
-				{
-					hub.add(Relay());
-				}
-				_hubs.push_back(hub);
-			}
-		}
-	}
-	if (m == "0")
+	if (m == "0" && (/*x is in slave list OR*/ addNew))
 	{
 		auto json = String() +
 			"{"
@@ -134,22 +144,31 @@ void HubManager::updateStatus(const std::string& text, bool addNew)
 		json.replace('\'', '\"');
 		Nrf.send(json);
 	}
-	for (auto& hub : _hubs)
+	else if (String(m.c_str()) == ID::get())
 	{
-		if (hub.getId() == x)
+		bool found = false;
+		for (auto& hub : _hubs)
 		{
-			hub.updateStatus(s);
+			if (hub.getId() == x)
+			{
+				hub.updateStatus(s);
+				found = true;
+				break;
+			}
 		}
-	}
-}
-
-void HubManager::sendWant()
-{
-	for (const auto& hub : _hubs)
-	{
-		if (hub.needSend())
-		{
-			hub.sendWant();
+		if (!found)
+		{	
+			int num = s[0] - '0';
+			if (0 < num && num < 10)
+			{
+				Serial.println(String("Hub ") + x.c_str() + " have " + s[0] + " relays");
+				Hub hub(x);
+				for (int i=0; i<num; i++)
+				{
+					hub.add(Relay());
+				}
+				_hubs.push_back(hub);
+			}
 		}
 	}
 }
@@ -157,7 +176,10 @@ void HubManager::sendWant()
 void HubManager::loop(int dt)
 {
 	Nrf.loop();
-	sendWant();
+	for (auto& hub : _hubs)
+	{
+		hub.loop(dt);
+	}
 	if (_addNewHub > 0)
 	{
 		if (dt > _addNewHub)
